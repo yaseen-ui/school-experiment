@@ -1,0 +1,36 @@
+.
+├── config
+│   └── config.js
+├── folder_structure.txt
+├── logs
+│   ├── application-2024-12-26.log
+│   └── error-2024-12-26.log
+├── migrations
+│   └── 20241226035351-create-tenant.js
+├── models
+│   ├── index.js
+│   └── tenant.js
+├── package-lock.json
+├── package.json
+├── seeders
+└── src
+    ├── app.js
+    ├── db
+    │   ├── migrations
+    │   └── seeders
+    ├── middlewares
+    │   └── errorHandler.js
+    ├── modules
+    │   ├── auth
+    │   ├── tenants
+    │   │   ├── tenant.controller.js
+    │   │   ├── tenant.model.js
+    │   │   ├── tenant.routes.js
+    │   │   └── tenant.service.js
+    │   └── user
+    ├── server.js
+    └── utils
+        ├── database.js
+        └── logger.js
+
+16 directories, 18 files
