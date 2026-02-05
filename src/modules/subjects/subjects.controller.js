@@ -7,7 +7,7 @@ class SubjectsController {
     try {
       const subject = await SubjectsService.createSubject(
         req.body,
-        req.tenant_id
+        req.tenantId
       );
       logger.info(`Subject created: ${JSON.stringify(subject)}`);
       return responseHandler(
@@ -24,7 +24,7 @@ class SubjectsController {
 
   static async getSubjects(req, res) {
     try {
-      const subjects = await SubjectsService.getSubjects(req.tenant_id);
+      const subjects = await SubjectsService.getSubjects(req.tenantId);
       return responseHandler(
         res,
         "success",
@@ -40,7 +40,7 @@ class SubjectsController {
   static async getSubjectById(req, res) {
     try {
       const { id } = req.params;
-      const subject = await SubjectsService.getSubjectById(id, req.tenant_id);
+      const subject = await SubjectsService.getSubjectById(id, req.tenantId);
       return responseHandler(
         res,
         "success",
@@ -56,9 +56,10 @@ class SubjectsController {
   static async getSubjectsByCourse(req, res) {
     try {
       const { courseId } = req.params;
+      console.log("Fetching subjects for course ID:", courseId);
       const subjects = await SubjectsService.getSubjectsByCourse(
         courseId,
-        req.tenant_id
+        req.tenantId
       );
       return responseHandler(
         res,
@@ -77,7 +78,7 @@ class SubjectsController {
       const subject = await SubjectsService.updateSubject(
         req.params.id,
         req.body,
-        req.tenant_id
+        req.tenantId
       );
       logger.info(`Subject updated: ${JSON.stringify(subject)}`);
       return responseHandler(
@@ -94,7 +95,7 @@ class SubjectsController {
 
   static async deleteSubject(req, res) {
     try {
-      await SubjectsService.deleteSubject(req.params.id, req.tenant_id);
+      await SubjectsService.deleteSubject(req.params.id, req.tenantId);
       logger.info(`Subject deleted: ID=${req.params.id}`);
       return responseHandler(
         res,

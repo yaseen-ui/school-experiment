@@ -8,7 +8,7 @@ class SectionsController {
     try {
       const section = await SectionsService.createSection(
         req.body,
-        req.tenant_id
+        req.tenantId
       );
       logger.info(`Section created: ${JSON.stringify(section)}`);
       return responseHandler(
@@ -25,8 +25,8 @@ class SectionsController {
 
   static async getSections(req, res) {
     try {
-      const grade_id = req.query.grade_id;
-      const sections = await SectionsService.getSections(req.tenant_id, grade_id);
+      const gradeId = req.query.gradeId;
+      const sections = await SectionsService.getSections(req.tenantId, gradeId);
       const result = {
         rows: sections,
         columns: tableColumns.section,
@@ -48,7 +48,7 @@ class SectionsController {
       const section = await SectionsService.updateSection(
         req.params.id,
         req.body,
-        req.tenant_id
+        req.tenantId
       );
       logger.info(`Section updated: ${JSON.stringify(section)}`);
       return responseHandler(
@@ -65,7 +65,7 @@ class SectionsController {
 
   static async deleteSection(req, res) {
     try {
-      await SectionsService.deleteSection(req.params.id, req.tenant_id);
+      await SectionsService.deleteSection(req.params.id, req.tenantId);
       logger.info(`Section deleted: ID=${req.params.id}`);
       return responseHandler(
         res,

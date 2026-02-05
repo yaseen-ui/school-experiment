@@ -1,11 +1,9 @@
 import TenantService from "./tenant.service.js";
-import RoleService from "../roles/roles.service.js";
-import UserService from "../user/user.service.js";
 import responseHandler from "../../utils/responseHandler.js";
 import logger from "../../utils/logger.js";
 import { sendSMS } from "../../utils/smsService.js";
-import { generateRandomPassword } from "../../utils/passwordUtils.js";
 import { tableColumns } from "../../utils/columns.js";
+
 
 class TenantController {
   static async createTenant(req, res) {
@@ -13,40 +11,15 @@ class TenantController {
       const { school_name, admin_full_name, admin_phone, admin_email } =
         req.body;
 
-      // Step 1: Create the tenant
-      const tenant = await TenantService.createTenant(req.body);
-
-      // Step 2: Create the school_super_admin role for the tenant
-      const role = await RoleService.createRole({
-        tenant_id: tenant.tenant_id,
-        role_name: "school_super_admin",
-        permissions: [
-          "manage_users",
-          "manage_roles",
-          "manage_courses",
-          "manage_tenants",
-        ],
-        description: "Admin role with full access to school management.",
-      });
-
       // const generatedPassword = generateRandomPassword(8); // Generate a 8-character password
       const generatedPassword = "tenant@123"; // Generate a 8-character password
-      const user = await UserService.createUser({
-        full_name: admin_full_name,
-        email: admin_email,
-        phone: admin_phone,
-        password: generatedPassword,
-        user_type: "tenant",
-        tenant_id: tenant.tenant_id,
-        role_id: role.role_id,
-      });
+      const tenant = await TenantService.onboardTenant(req.body, generatedPassword);
 
-      // Step 4: Send a welcome SMS to the admin's phone number
       const smsMessage = `Welcome to ${school_name}! Your username is ${admin_email} and your password is ${generatedPassword}. Please log in to your account.`;
       await sendSMS(admin_phone, smsMessage);
 
       logger.info(
-        `Tenant and admin user created successfully: ${tenant.tenant_id}`
+        `Tenant and admin user created successfully: ${tenant.id}`
       );
       return responseHandler(
         res,
@@ -54,6 +27,7 @@ class TenantController {
         tenant,
         "Tenant and school_super_admin created successfully."
       );
+
     } catch (error) {
       logger.error(`Error creating tenant: ${error.message}`);
       return responseHandler(

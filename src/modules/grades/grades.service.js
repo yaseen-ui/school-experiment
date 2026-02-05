@@ -1,149 +1,134 @@
-import { Grade, Course } from "../../models/index.js";
+import { prisma } from "../../lib/prisma.js";
+
+// ------ mappers: in <= out (camelCase) ------
+const mapIn = (data = {}) => ({
+  tenantId: data.tenantId,
+  courseId: data.courseId,
+  gradeName: data.gradeName,
+});
+
+const mapUpdateIn = (data = {}) => {
+  const out = {
+    gradeName: data.gradeName,
+  };
+  Object.keys(out).forEach((k) => out[k] === undefined && delete out[k]);
+  return out;
+};
+
+const mapOut = (row) => {
+  if (!row) return null;
+  return {
+    id: row.id,
+    tenantId: row.tenantId,
+    courseId: row.courseId,
+    gradeName: row.gradeName,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    courseName: row.course ? row.course.courseName : null,
+  };
+};
 
 class GradesService {
   async createGrade(data, tenantId) {
-    if (!data.course_id) {
-      throw new Error("course_id is required to create a grade.");
+    if (!data?.courseId) {
+      throw new Error("courseId is required to create a grade.");
     }
 
-    const duplicate = await Grade.findOne({
+    // Duplicate guard: (tenantId, courseId, gradeName)
+    const duplicate = await prisma.grade.findFirst({
       where: {
-        course_id: data.course_id,
-        grade_name: data.grade_name,
-        tenant_id: tenantId,
+        tenantId,
+        courseId: data.courseId,
+        gradeName: data.gradeName,
       },
     });
-
     if (duplicate) {
-      const course = await Course.findOne({
-        where: { course_id: data.course_id },
-        attributes: ["course_name"],
+      const course = await prisma.course.findUnique({
+        where: { id: data.courseId },
+        select: { courseName: true },
       });
-
       throw new Error(
-        `Grade with the name '${
-          data.grade_name
-        }' already exists for the course '${
-          course ? course.course_name : "Unknown Course"
-        }'.`
+        `Grade with the name '${data.gradeName}' already exists for the course '${course ? course.courseName : "Unknown Course"}'.`
       );
     }
 
-    const newGrade = await Grade.create({ ...data, tenant_id: tenantId });
-
-    const createdGrade = await Grade.findOne({
-      where: { grade_id: newGrade.grade_id },
-      include: [
-        {
-          model: Course,
-          as: "course",
-          attributes: ["course_name"],
-        },
-      ],
+    const created = await prisma.grade.create({
+      data: {
+        ...mapIn(data),
+        tenantId,
+      },
+      include: { course: { select: { courseName: true } } },
     });
 
-    return {
-      ...createdGrade.toJSON(),
-      course_name: createdGrade.course ? createdGrade.course.course_name : null,
-    };
+    return mapOut(created);
   }
 
-  async getGrades(tenant_id, course_id) {
-    const whereClause = { tenant_id };
-    if (course_id) {
-      whereClause.course_id = course_id;
-    }
+  async getGrades(tenantId, courseId) {
+    const where = { tenantId };
+    if (courseId) where.courseId = courseId;
 
-    const grades = await Grade.findAll({
-      where: whereClause,
-      include: [
-        {
-          model: Course,
-          as: "course",
-          attributes: ["course_name"],
-        },
-      ],
+    const grades = await prisma.grade.findMany({
+      where,
+      include: { course: { select: { courseName: true } } },
+      orderBy: [{ createdAt: "desc" }],
     });
 
-    return grades.map((grade) => {
-      const gradeJSON = grade.toJSON();
-      gradeJSON.course_name = grade.course ? grade.course.course_name : null;
-      return gradeJSON;
-    });
+    return grades.map(mapOut);
   }
 
   async updateGrade(gradeId, data, tenantId) {
-    const grade = await Grade.findOne({
-      where: { grade_id: gradeId, tenant_id: tenantId },
+    const existing = await prisma.grade.findFirst({
+      where: { id: gradeId, tenantId },
     });
+    if (!existing) throw new Error("Grade not found or unauthorized");
 
-    if (!grade) throw new Error("Grade not found or unauthorized");
-
-    if (data.grade_name && data.grade_name !== grade.grade_name) {
-      const duplicate = await Grade.findOne({
+    // If changing gradeName, ensure no duplicate on same course
+    const nextName = data.gradeName;
+    if (nextName && nextName !== existing.gradeName) {
+      const dup = await prisma.grade.findFirst({
         where: {
-          course_id: grade.course_id,
-          grade_name: data.grade_name,
-          tenant_id: tenantId,
+          tenantId,
+          courseId: existing.courseId,
+          gradeName: nextName,
+          NOT: { id: gradeId },
         },
       });
-
-      if (duplicate) {
-        throw new Error(
-          "Grade with the same name already exists for this course."
-        );
+      if (dup) {
+        throw new Error("Grade with the same name already exists for this course.");
       }
     }
 
-    await grade.update(data);
-
-    const updatedGrade = await Grade.findOne({
-      where: { grade_id: gradeId },
-      include: [
-        {
-          model: Course,
-          as: "course",
-          attributes: ["course_name"],
-        },
-      ],
+    await prisma.grade.update({
+      where: { id: gradeId },
+      data: mapUpdateIn(data),
     });
 
-    return {
-      ...updatedGrade.toJSON(),
-      course_name: updatedGrade.course ? updatedGrade.course.course_name : null,
-    };
+    const updated = await prisma.grade.findFirst({
+      where: { id: gradeId, tenantId },
+      include: { course: { select: { courseName: true } } },
+    });
+
+    return mapOut(updated);
   }
 
-  async deleteGrade(gradeId, tenant_id) {
-    const grade = await Grade.findOne({
-      where: { grade_id: gradeId, tenant_id },
+  async deleteGrade(gradeId, tenantId) {
+    const existing = await prisma.grade.findFirst({
+      where: { id: gradeId, tenantId },
     });
+    if (!existing) throw new Error("Grade not found or unauthorized");
 
+    // ensure tenant guard
+    await prisma.grade.delete({ where: { id: gradeId } });
+    return { success: true };
+  }
+
+  async getGradeById(gradeId, tenantId) {
+    const grade = await prisma.grade.findFirst({
+      where: { id: gradeId, tenantId },
+      include: { course: { select: { courseName: true } } },
+    });
     if (!grade) throw new Error("Grade not found or unauthorized");
-
-    return await grade.destroy();
-  }
-
-  async getGradeById(gradeId, tenant_id) {
-    const grade = await Grade.findOne({
-      where: { grade_id: gradeId, tenant_id },
-      include: [
-        {
-          model: Course,
-          as: "course",
-          attributes: ["course_name"],
-        },
-      ],
-    });
-
-    if (!grade) {
-      throw new Error("Grade not found or unauthorized");
-    }
-
-    return {
-      ...grade.toJSON(),
-      course_name: grade.course ? grade.course.course_name : null,
-    };
+    return mapOut(grade);
   }
 }
 

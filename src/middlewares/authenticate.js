@@ -1,10 +1,11 @@
+// src/middleware/authenticate.js (Prisma version)
+
 import jwt from "jsonwebtoken";
 import logger from "../utils/logger.js";
-import { TokenBlacklist } from "../models/index.js";
-import { Op } from "sequelize";
+import { prisma } from "../lib/prisma.js"; // <<< Prisma client singleton
 
 export const authenticate = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Extract token from `Authorization: Bearer <token>`
+  const token = req.headers.authorization?.split(" ")[1]; // Authorization: Bearer <token>
   if (!token) {
     return res
       .status(401)
@@ -12,8 +13,8 @@ export const authenticate = async (req, res, next) => {
   }
 
   try {
-    // Check if token is blacklisted
-    const blacklistedToken = await TokenBlacklist.findOne({
+    // Check blacklist (token is UNIQUE in schema; use findUnique)
+    const blacklistedToken = await prisma.tokenBlacklist.findUnique({
       where: { token },
     });
 
@@ -30,7 +31,7 @@ export const authenticate = async (req, res, next) => {
       process.env.JWT_SECRET || "your_jwt_secret"
     );
 
-    if (!decoded.user_id || !decoded.user_type) {
+    if (!decoded.userId || !decoded.userType) {
       return res.status(400).json({
         status: "fail",
         message: "Invalid token: Missing required fields.",
@@ -48,13 +49,11 @@ export const authenticate = async (req, res, next) => {
   }
 };
 
-// Cleanup expired tokens periodically
+// Cleanup expired tokens periodically (Prisma)
 const cleanupExpiredTokens = async () => {
   try {
-    await TokenBlacklist.destroy({
-      where: {
-        expiredAt: { [Op.lt]: new Date() }, // Delete expired tokens
-      },
+    await prisma.tokenBlacklist.deleteMany({
+      where: { expiredAt: { lt: new Date() } },
     });
     console.log("✅ Expired tokens cleaned up.");
   } catch (error) {

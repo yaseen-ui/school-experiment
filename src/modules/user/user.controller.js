@@ -7,7 +7,7 @@ class UserController {
     try {
       const user = await UserService.createUser({
         ...req.body,
-        tenant_id: req.tenant_id,
+        tenantId: req.tenantId,
       });
       logger.info(`User created: ${JSON.stringify(user)}`);
       return responseHandler(
@@ -29,7 +29,7 @@ class UserController {
 
   static async getAllUsers(req, res) {
     try {
-      const tenantId = req.tenant_id;
+      const tenantId = req.tenantId;
       if (!tenantId) {
         logger.warn("Tenant ID is missing in the request.");
         return responseHandler(res, "fail", null, "Unauthorized access.");
@@ -55,7 +55,7 @@ class UserController {
 
   static async getUserById(req, res) {
     try {
-      const user = await UserService.getUserById(req.params.id, req.tenant_id);
+      const user = await UserService.getUserById(req.params.id, req.tenantId);
       if (!user) {
         logger.warn(`User not found: ${req.params.id}`);
         return responseHandler(res, "fail", null, "User not found.");
@@ -153,11 +153,11 @@ class UserController {
 
   static async updatePassword(req, res) {
     try {
-      const user_id = req.user.user_id; // Extract user_id from JWT token
+      const userId = req.user.userId; // Extract userId from JWT token
       const { oldPassword, newPassword } = req.body;
       debugger;
       const response = await UserService.updatePassword(
-        user_id,
+        userId,
         oldPassword,
         newPassword
       );

@@ -1,157 +1,181 @@
-import { Section, Grade } from "../../models/index.js";
+import { prisma } from "../../lib/prisma.js";
+
+// ---- mappers (camelCase) ----
+const mapIn = (data = {}, tenantId) => {
+  const out = {
+    tenantId,
+    gradeId: data.gradeId ?? data.grade_id,
+    sectionName: data.sectionName ?? data.section_name,
+  };
+  Object.keys(out).forEach((k) => out[k] === undefined && delete out[k]);
+  return out;
+};
+
+const mapUpdateIn = (data = {}) => {
+  const out = {
+    sectionName: data.sectionName ?? data.section_name,
+  };
+  Object.keys(out).forEach((k) => out[k] === undefined && delete out[k]);
+  return out;
+};
+
+const mapOut = (row) => {
+  if (!row) return null;
+  return {
+    id: row.id,
+    tenantId: row.tenantId,
+    gradeId: row.gradeId,
+    sectionName: row.sectionName,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    gradeName: row.grade ? row.grade.gradeName : null,
+    subjects: row.sectionSubjects
+      ? row.sectionSubjects.map((ss) => ({
+          id: ss.subject.id,
+          subjectName: ss.subject.subjectName,
+          courseId: ss.subject.courseId,
+          isCommon: ss.subject.isCommon,
+          sectionSubjectId: ss.id,
+          isElective: ss.isElective,
+        }))
+      : [],
+  };
+};
 
 class SectionsService {
   async createSection(data, tenantId) {
-    if (!data.grade_id) {
-      throw new Error("grade_id is required to create a section.");
+    if (!data?.gradeId && !data?.grade_id) {
+      throw new Error("gradeId is required to create a section.");
     }
 
-    const duplicate = await Section.findOne({
+    // Duplicate check within (tenant, grade, sectionName)
+    const duplicate = await prisma.section.findFirst({
       where: {
-        grade_id: data.grade_id,
-        section_name: data.section_name,
-        tenant_id: tenantId,
+        tenantId,
+        gradeId: data.gradeId ?? data.grade_id,
+        sectionName: data.sectionName ?? data.section_name,
       },
+      select: { id: true },
     });
-
     if (duplicate) {
-      // Fetch grade details to provide a meaningful error message
-      const grade = await Grade.findOne({
-        where: { grade_id: data.grade_id },
-        attributes: ["grade_name"],
+      const grade = await prisma.grade.findUnique({
+        where: { id: data.gradeId ?? data.grade_id },
+        select: { gradeName: true },
       });
-
       throw new Error(
-        `Section with the name '${
-          data.section_name
-        }' already exists for grade '${
-          grade ? grade.grade_name : "Unknown Grade"
-        }'.`
+        `Section with the name '${data.sectionName ?? data.section_name}' already exists for grade '${grade ? grade.gradeName : "Unknown Grade"}'.`
       );
     }
 
-    // Create the section
-    const newSection = await Section.create({ ...data, tenant_id: tenantId });
-
-    // Fetch the newly created section with grade details
-    const createdSection = await Section.findOne({
-      where: { section_id: newSection.section_id },
-      include: [
-        {
-          model: Grade,
-          as: "grade",
-          attributes: ["grade_name"],
-        },
-      ],
+    const created = await prisma.section.create({
+      data: mapIn(data, tenantId),
+      include: { grade: { select: { gradeName: true } } },
     });
 
-    return {
-      ...createdSection.toJSON(),
-      grade_name: createdSection.grade ? createdSection.grade.grade_name : null,
-    };
-  }
-
-  async getSections(tenantId, grade_id) {
-    // Build query conditions
-    const whereClause = { tenant_id: tenantId };
-    if (grade_id) {
-      whereClause.grade_id = grade_id;
+    // Create SectionSubject records if subjectIds are provided
+    if (data.subjectIds && Array.isArray(data.subjectIds) && data.subjectIds.length > 0) {
+      await prisma.sectionSubject.createMany({
+        data: data.subjectIds.map((subjectId) => ({
+          tenantId,
+          sectionId: created.id,
+          subjectId,
+          isElective: false, // default value
+        })),
+      });
     }
 
-    // Fetch sections along with grade details
-    const sections = await Section.findAll({
-      where: whereClause,
-      include: [
-        {
-          model: Grade,
-          as: "grade",
-          attributes: ["grade_name"],
+    // Fetch the created section with subjects included
+    const sectionWithSubjects = await prisma.section.findFirst({
+      where: { id: created.id, tenantId },
+      include: {
+        grade: { select: { gradeName: true } },
+        sectionSubjects: {
+          include: { subject: true },
         },
-      ],
+      },
     });
 
-    return sections.map((section) => {
-      const sectionJSON = section.toJSON();
-      sectionJSON.grade_name = section.grade ? section.grade.grade_name : null;
-      return sectionJSON;
+    return mapOut(sectionWithSubjects);
+  }
+
+  async getSections(tenantId, gradeId) {
+    const where = { tenantId };
+    if (gradeId) where.gradeId = gradeId;
+
+    const sections = await prisma.section.findMany({
+      where,
+      include: {
+        grade: { select: { gradeName: true } },
+        sectionSubjects: {
+          include: { subject: true },
+        },
+      },
+      orderBy: [{ createdAt: "desc" }],
     });
+
+    return sections.map(mapOut);
   }
 
   async getSectionById(sectionId, tenantId) {
-    const section = await Section.findOne({
-      where: { section_id: sectionId, tenant_id: tenantId },
-      include: [
-        {
-          model: Grade,
-          as: "grade",
-          attributes: ["grade_name"],
-        },
-      ],
+    const section = await prisma.section.findFirst({
+      where: { id: sectionId, tenantId },
+      include: { grade: { select: { gradeName: true } } },
     });
 
     if (!section) {
       throw new Error("Section not found or unauthorized");
     }
 
-    return {
-      ...section.toJSON(),
-      grade_name: section.grade ? section.grade.grade_name : null,
-    };
+    return mapOut(section);
   }
 
   async updateSection(sectionId, data, tenantId) {
-    const section = await Section.findOne({
-      where: { section_id: sectionId, tenant_id: tenantId },
+    const existing = await prisma.section.findFirst({
+      where: { id: sectionId, tenantId },
+      select: { id: true, sectionName: true, gradeId: true },
     });
+    if (!existing) throw new Error("Section not found or unauthorized");
 
-    if (!section) throw new Error("Section not found or unauthorized");
-
-    // Check for duplicate section name within the same grade (only if name is changing)
-    if (data.section_name && data.section_name !== section.section_name) {
-      const duplicate = await Section.findOne({
+    const nextName = data.sectionName ?? data.section_name;
+    if (nextName && nextName !== existing.sectionName) {
+      const dup = await prisma.section.findFirst({
         where: {
-          grade_id: section.grade_id, // Keep the existing grade_id
-          section_name: data.section_name,
-          tenant_id: tenantId,
+          tenantId,
+          gradeId: existing.gradeId,
+          sectionName: nextName,
+          NOT: { id: sectionId },
         },
+        select: { id: true },
       });
-
-      if (duplicate) {
+      if (dup) {
         throw new Error(
-          `Section with the name '${data.section_name}' already exists for this grade.`
+          `Section with the name '${nextName}' already exists for this grade.`
         );
       }
     }
 
-    // Proceed to update the section
-    await section.update(data);
-
-    // Fetch updated section with grade details
-    const updatedSection = await Section.findOne({
-      where: { section_id: sectionId },
-      include: [
-        {
-          model: Grade,
-          as: "grade",
-          attributes: ["grade_name"],
-        },
-      ],
+    await prisma.section.update({
+      where: { id: sectionId },
+      data: mapUpdateIn(data),
     });
 
-    return {
-      ...updatedSection.toJSON(),
-      grade_name: updatedSection.grade ? updatedSection.grade.grade_name : null,
-    };
+    const updated = await prisma.section.findFirst({
+      where: { id: sectionId, tenantId },
+      include: { grade: { select: { gradeName: true } } },
+    });
+
+    return mapOut(updated);
   }
 
   async deleteSection(sectionId, tenantId) {
-    const section = await Section.findOne({
-      where: { section_id: sectionId, tenant_id: tenantId },
+    const existing = await prisma.section.findFirst({
+      where: { id: sectionId, tenantId },
+      select: { id: true },
     });
+    if (!existing) throw new Error("Section not found or unauthorized");
 
-    if (!section) throw new Error("Section not found or unauthorized");
-
-    return await section.destroy();
+    await prisma.section.delete({ where: { id: sectionId } });
+    return { success: true };
   }
 }
 

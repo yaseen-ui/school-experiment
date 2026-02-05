@@ -15,21 +15,20 @@ import uploadsRoutes from "./modules/uploads/uploads.routes.js";
 import gcsRoutes from "./modules/gcs/gcs.route.js";
 import publicRoutes from "./modules/public/public.routes.js";
 import studentsRoutes from "./modules/students/students.route.js";
+import teachersRoutes from "./modules/teachers/teachers.routes.js";
+import academicYearRoutes from "./modules/academic-years/academicYear.routes.js";
+import resolveAcademicYear from "./middlewares/resolveAcademicYear.js";
 
 const app = express();
 
 app.use(express.json());
 
-// Basic CORS configuration (Allows all origins)
-app.use(cors());
-
-// If you want to allow specific origins and methods:
+// Allow all domains for CORS
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://yourdomain.com"], // Allow only these origins
+    origin: "*", // Allow all origins
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ["Content-Type", "Authorization", "x-tenant-id"], // Allow these headers
-    credentials: true, // Allow cookies if needed
+    allowedHeaders: ["Content-Type", "Authorization", "x-tenant-id"],
   })
 );
 
@@ -45,6 +44,7 @@ app.use("/api/tenants", tenantRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/roles", roleRoutes);
+app.use("/api/academic-years", academicYearRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/grades", gradeRoutes);
 app.use("/api/sections", sectionRoutes);
@@ -53,6 +53,7 @@ app.use("/api/inventory", inventoryRoutes);
 app.use("/api/uploads", uploadsRoutes);
 app.use("/api/gcs", gcsRoutes);
 app.use("/api/students", studentsRoutes);
+app.use("/api/teachers", teachersRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

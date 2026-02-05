@@ -5,10 +5,10 @@ import { tableColumns } from "../../utils/columns.js";
 class CourseController {
   static async createCourse(req, res) {
     try {
-      const tenant_id = req.tenant_id; // Get tenant_id from headers
+      const tenantId = req.tenantId; // Get tenantId from headers
       const course = await CourseService.createCourse({
         ...req.body,
-        tenant_id,
+        tenantId,
       });
       return responseHandler(
         res,
@@ -28,7 +28,7 @@ class CourseController {
 
   static async getAllCourses(req, res) {
     try {
-      const courses = await CourseService.getAllCourses(req.tenant_id);
+      const courses = await CourseService.getAllCourses(req.tenantId);
       const result = { rows: courses, columns: tableColumns.course };
       console.log(result);
       return responseHandler(
@@ -46,7 +46,7 @@ class CourseController {
     try {
       const course = await CourseService.getCourseById(
         req.params.id,
-        req.tenant_id
+        req.tenantId
       );
       if (!course) {
         return responseHandler(res, "fail", null, "Course not found.");
@@ -67,7 +67,7 @@ class CourseController {
       const updated = await CourseService.updateCourse(
         req.params.id,
         req.body,
-        req.tenant_id
+        req.tenantId
       );
       if (!updated[0]) {
         return responseHandler(res, "fail", null, "Course not found.");
@@ -87,7 +87,7 @@ class CourseController {
     try {
       const deleted = await CourseService.deleteCourse(
         req.params.id,
-        req.tenant_id
+        req.tenantId
       );
       if (!deleted) {
         return responseHandler(res, "fail", null, "Course not found.");

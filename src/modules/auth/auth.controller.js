@@ -1,28 +1,23 @@
 import AuthService from "./auth.service.js";
-import responseHandler from "./../../utils/responseHandler.js";
-import { TokenBlacklist } from "../../models/index.js";
+import responseHandler from "../../utils/responseHandler.js";
+import { prisma } from "../../lib/prisma.js";
 
 class AuthController {
   /**
-   * Login Functionality
+   * Login
    */
   static async login(req, res) {
     try {
       const { email, password } = req.body;
       const { token, user } = await AuthService.login(email, password);
-      return responseHandler(
-        res,
-        "success",
-        { token, user },
-        "Login successful."
-      );
+      return responseHandler(res, "success", { token, user }, "Login successful.");
     } catch (error) {
       return responseHandler(res, "fail", null, error.message);
     }
   }
 
   /**
-   * Logout Functionality - Blacklists JWT Token
+   * Logout — blacklist JWT
    */
   static async logout(req, res) {
     try {
@@ -30,11 +25,13 @@ class AuthController {
       if (!token) {
         return responseHandler(res, "fail", null, "No token provided.");
       }
-      console.log("came till logout method", token);
-      // Add token to blacklist
-      await TokenBlacklist.create({
-        token,
-        expired_at: new Date(), // Store the blacklist entry with an expiration date
+
+      // Add token to blacklist (token is UNIQUE in schema)
+      await prisma.tokenBlacklist.create({
+        data: {
+          token,
+          expiredAt: new Date(), // maps to DB column `expired_at`
+        },
       });
 
       return responseHandler(res, "success", null, "Logout successful.");

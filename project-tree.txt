@@ -1,0 +1,57 @@
+.
+├── .DS_Store
+├── .env
+├── .gitignore
+├── config
+│   └── google-service-key.json
+├── jsconfig.json
+├── logs
+│   ├── .0fb0fa1cb02a3f7532c6cb8ef52778beae5c4a3c-audit.json
+│   ├── .d308feaa27989cfe16cef94cb2f8888bc5bacb7c-audit.json
+│   ├── application-2025-11-07.log
+│   └── error-2025-11-07.log
+├── package-lock.json
+├── package.json
+├── postman-collection.json
+├── prisma
+│   └── schema.prisma
+├── prisma.config.ts
+├── project-tree.txt
+└── src
+    ├── .DS_Store
+    ├── app.js
+    ├── global.config.js
+    ├── lib
+    │   └── prisma.js
+    ├── middlewares
+    │   ├── authenticate.js
+    │   ├── authenticateCompany.js
+    │   ├── authenticateTenant.js
+    │   └── errorHandler.js
+    ├── modules
+    │   ├── .DS_Store
+    │   ├── auth
+    │   ├── courses
+    │   ├── gcs
+    │   ├── grades
+    │   ├── inventory-management
+    │   ├── public
+    │   ├── roles
+    │   ├── sections
+    │   ├── students
+    │   ├── subjects
+    │   ├── tenants
+    │   ├── uploads
+    │   └── user
+    ├── server.js
+    └── utils
+        ├── columns.js
+        ├── database.js
+        ├── logger.js
+        ├── otpUtils.js
+        ├── passwordUtils.js
+        ├── requestHelper.js
+        ├── responseHandler.js
+        └── smsService.js
+
+22 directories, 33 files

@@ -6,8 +6,14 @@ import { tableColumns } from "../../utils/columns.js";
 class StudentController {
   async createStudent(req, res) {
     try {
-      const { tenant_id } = req.user; // Extract tenant_id from user session
-      const student = await StudentService.createStudent(req.body, tenant_id);
+      const { tenantId } = req.user; // Extract tenantId from user session
+      // academicYearId can be passed from middleware (resolveAcademicYear) or null to auto-resolve
+      const academicYearId = req.academicYearId || null;
+      const student = await StudentService.createStudent(
+        req.body,
+        tenantId,
+        academicYearId
+      );
       return responseHandler(
         res,
         "success",
@@ -16,16 +22,16 @@ class StudentController {
       );
     } catch (error) {
       logger.error("Error creating student:", error);
-      return responseHandler(res, "error", null, "Failed to create student.");
+      return responseHandler(res, "error", null, error.message);
     }
   }
 
   async getStudentById(req, res) {
     try {
-      const { tenant_id } = req.user;
+      const { tenantId } = req.user;
       const student = await StudentService.getStudentById(
         req.params.id,
-        tenant_id
+        tenantId
       );
       if (!student) {
         return responseHandler(res, "error", null, "Student not found.");
@@ -44,11 +50,11 @@ class StudentController {
 
   async updateStudent(req, res) {
     try {
-      const { tenant_id } = req.user;
+      const { tenantId } = req.user;
       const updated = await StudentService.updateStudent(
         req.params.id,
         req.body,
-        tenant_id
+        tenantId
       );
       if (!updated) {
         return responseHandler(res, "error", null, "Student not found.");
@@ -67,10 +73,10 @@ class StudentController {
 
   async deleteStudent(req, res) {
     try {
-      const { tenant_id } = req.user;
+      const { tenantId } = req.user;
       const deleted = await StudentService.deleteStudent(
         req.params.id,
-        tenant_id
+        tenantId
       );
       if (!deleted) {
         return responseHandler(res, "error", null, "Student not found.");
@@ -89,8 +95,8 @@ class StudentController {
 
   async getAllStudents(req, res) {
     try {
-      const { tenant_id } = req.user;
-      const studentsList = await StudentService.getAllStudents(tenant_id);
+      const { tenantId } = req.user;
+      const studentsList = await StudentService.getAllStudents(tenantId);
       const result = {
         columns: tableColumns.students,
         rows: studentsList,

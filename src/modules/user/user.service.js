@@ -1,107 +1,195 @@
+// src/modules/users/user.service.js
 import bcrypt from "bcryptjs";
-import { User } from "../../models/index.js";
-import { Sequelize } from "sequelize";
+import { prisma } from "../../lib/prisma.js";
+import { Prisma } from "@prisma/client";
 import { generateOTP } from "../../utils/otpUtils.js";
 import { sendSMS } from "../../utils/smsService.js";
 
+// ---- mappers -------------------------------------------------
+const mapIn = (data = {}) => {
+  // Accept snake_case or camelCase, only allow expected fields
+  const out = {
+    email: data.email,
+    password: data.password, // caller decides if plain or hashed (createUser hashes)
+    userType: data.userType,
+    tenantId: data.tenantId ?? null,
+    fullName: data.fullName,
+    phone: data.phone,
+    roleId: data.roleId,
+    otp: data.otp ?? null,
+    isFirstLogin: data.isFirstLogin,
+  };
+  Object.keys(out).forEach((k) => out[k] === undefined && delete out[k]);
+  return out;
+};
+
+const mapOut = (row) => {
+  if (!row) return null;
+  return {
+    id: row.id,
+    email: row.email,
+    userType: row.userType,
+    tenantId: row.tenantId,
+    fullName: row.fullName,
+    phone: row.phone,
+    roleId: row.roleId ?? null,
+    otp: row.otp ?? null,
+    isFirstLogin: row.isFirstLogin,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+};
+
+const mapMany = (rows) => rows.map(mapOut);
+
+// ---- service -------------------------------------------------
 class UserService {
   static async createUser(data) {
     try {
       const hashedPassword = await bcrypt.hash(data.password, 10);
-      return await User.create({ ...data, password: hashedPassword });
+      const created = await prisma.user.create({
+        data: { ...mapIn(data), password: hashedPassword },
+        select: {
+          id: true, email: true, userType: true, tenantId: true,
+          fullName: true, phone: true, roleId: true, otp: true,
+          isFirstLogin: true, createdAt: true, updatedAt: true
+        },
+      });
+      return mapOut(created);
     } catch (error) {
-      if (error instanceof Sequelize.UniqueConstraintError) {
-        const field = error.errors[0].path; // e.g., 'email'
-        const message = `A user with this ${field} already exists.`;
-        throw new Error(message); // Throw a more user-friendly error
+      // Unique constraint (e.g., email)
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+        const field = Array.isArray(error.meta?.target) ? error.meta.target[0] : "field";
+        throw new Error(`A user with this ${field} already exists.`);
       }
       throw error;
     }
   }
 
-  static async getAllUsers(tenant_id) {
+  static async getAllUsers(tenantId) {
     try {
-      let users;
-      if (!tenant_id) {
-        users = await User.findAll();
-      } else {
-        users = await User.findAll({
-          where: { tenant_id },
-        });
-      }
-      return users;
+      const where = tenantId ? { tenantId } : {};
+      const users = await prisma.user.findMany({
+        where,
+        select: {
+          id: true, email: true, userType: true, tenantId: true,
+          fullName: true, phone: true, roleId: true, otp: true,
+          isFirstLogin: true, createdAt: true, updatedAt: true
+        },
+        orderBy: { createdAt: "desc" },
+      });
+      return mapMany(users);
     } catch (error) {
-      throw new Error(
-        `Failed to fetch users for tenant ID ${tenant_id}: ${error.message}`
-      );
+      throw new Error(`Failed to fetch users for tenant ID ${tenantId}: ${error.message}`);
     }
   }
 
-  static async getUserById(userId, tenant_id) {
-    return await User.findByPk(userId, { where: { tenant_id } });
+  static async getUserById(userId, tenantId) {
+    // Sequelize had findByPk with where; emulate with findFirst scoped by tenant
+    const user = await prisma.user.findFirst({
+      where: { id: userId, ...(tenantId ? { tenantId } : {}) },
+      select: {
+        id: true, email: true, userType: true, tenantId: true,
+        fullName: true, phone: true, roleId: true, otp: true,
+        isFirstLogin: true, createdAt: true, updatedAt: true
+      },
+    });
+    return mapOut(user);
   }
 
   static async updateUser(userId, data) {
-    return await User.update(data, { where: { user_id: userId } });
+    // Keep parity: no auto-hash here; use updatePassword for password changes
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: mapIn(data),
+      select: {
+        id: true, email: true, userType: true, tenantId: true,
+        fullName: true, phone: true, roleId: true, otp: true,
+        isFirstLogin: true, createdAt: true, updatedAt: true
+      },
+    });
+    return mapOut(updated);
   }
 
   static async deleteUser(userId) {
-    return await User.destroy({ where: { user_id: userId } });
+    const deleted = await prisma.user.delete({
+      where: { id: userId },
+      select: {
+        id: true, email: true, userType: true, tenantId: true,
+        fullName: true, phone: true, roleId: true, otp: true,
+        isFirstLogin: true, createdAt: true, updatedAt: true
+      },
+    });
+    return mapOut(deleted);
   }
 
   static async createCompanyUser(data) {
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    return await User.create({
-      ...data,
-      user_type: "company",
-      password: hashedPassword,
-      tenant_id: null,
+    const created = await prisma.user.create({
+      data: {
+        ...mapIn(data),
+        userType: "company",
+        tenantId: null,
+        password: hashedPassword,
+      },
+      select: {
+        id: true, email: true, userType: true, tenantId: true,
+        fullName: true, phone: true, roleId: true, otp: true,
+        isFirstLogin: true, createdAt: true, updatedAt: true
+      },
     });
+    return mapOut(created);
   }
 
   static async getAllCompanyUsers() {
-    return await User.findAll({ where: { user_type: "company" } });
+    const rows = await prisma.user.findMany({
+      where: { userType: "company" },
+      select: {
+        id: true, email: true, userType: true, tenantId: true,
+        fullName: true, phone: true, roleId: true, otp: true,
+        isFirstLogin: true, createdAt: true, updatedAt: true
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return mapMany(rows);
   }
 
-  static async updatePassword(user_id, oldPassword, newPassword) {
-    // Fetch the user with primary key and password explicitly included
-    const user = await User.findByPk(user_id, {
-      attributes: ["user_id", "password"], // Include both primary key and password
+  static async updatePassword(userId, oldPassword, newPassword) {
+    // Fetch with password included
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, password: true },
     });
 
-    if (!user) {
-      throw new Error("User not found.");
-    }
+    if (!user) throw new Error("User not found.");
 
-    // Compare the old password with the stored password
     const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      throw new Error("Old password is incorrect.");
-    }
+    if (!isMatch) throw new Error("Old password is incorrect.");
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update the password in the database
-    await user.update({ password: hashedPassword });
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
 
     return { message: "Password updated successfully." };
   }
 
   static async forgetPassword(email) {
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      throw new Error("User not found.");
-    }
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, phone: true },
+    });
+    if (!user) throw new Error("User not found.");
 
-    // Generate an OTP
     const otp = generateOTP();
 
-    // Save the OTP in the database (e.g., add a column for OTP in the User table or store it in a cache)
-    await user.update({ otp });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { otp },
+    });
 
-    // Send OTP via SMS
     const message = `Your OTP for resetting your password is ${otp}. It is valid for 10 minutes.`;
     await sendSMS(user.phone, message);
 
@@ -109,22 +197,20 @@ class UserService {
   }
 
   static async resetPasswordWithOTP(email, otp, newPassword) {
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      throw new Error("User not found.");
-    }
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, otp: true },
+    });
+    if (!user) throw new Error("User not found.");
 
-    // Verify OTP
-    if (user.otp !== otp) {
-      throw new Error("Invalid OTP.");
-    }
+    if (user.otp !== otp) throw new Error("Invalid OTP.");
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update the password and clear the OTP
-    await user.update({ password: hashedPassword, otp: null });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword, otp: null },
+    });
 
     return { message: "Password reset successfully." };
   }

@@ -7,7 +7,7 @@ class RoleController {
     try {
       const role = await RoleService.createRole({
         ...req.body,
-        tenant_id: req.tenant_id,
+        tenantId: req.tenantId,
       });
       logger.info(`Role created: ${JSON.stringify(role)}`);
       return responseHandler(
@@ -40,7 +40,7 @@ class RoleController {
   static async getRoleById(req, res) {
     try {
       const { id } = req.params;
-      const role = await RoleService.getRoleById(id, req.tenant_id);
+      const role = await RoleService.getRoleById(id, req.tenantId);
       if (!role) {
         return responseHandler(res, "fail", null, "Role not found.");
       }
@@ -59,7 +59,7 @@ class RoleController {
   static async updateRole(req, res) {
     try {
       const { id } = req.params;
-      const updated = await RoleService.updateRole(id, req.body, req.tenant_id);
+      const updated = await RoleService.updateRole(id, req.body, req.tenantId);
       if (!updated[0]) {
         return responseHandler(res, "fail", null, "Role not found.");
       }
@@ -78,7 +78,7 @@ class RoleController {
   static async deleteRole(req, res) {
     try {
       const { id } = req.params;
-      const deleted = await RoleService.deleteRole(id, req.tenant_id);
+      const deleted = await RoleService.deleteRole(id, req.tenantId);
       if (!deleted) {
         return responseHandler(res, "fail", null, "Role not found.");
       }

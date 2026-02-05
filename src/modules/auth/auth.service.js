@@ -1,15 +1,33 @@
-import { User } from "../../models/index.js";
+// src/modules/auth/auth.service.js  (Prisma version)
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { prisma } from "../../lib/prisma.js";
 
 dotenv.config();
+
 class AuthService {
   static async login(email, password) {
     try {
-      const user = await User.scope("withPassword").findOne({
+      // Fetch user by unique email, including hashed password & role
+      const user = await prisma.user.findUnique({
         where: { email },
+        select: {
+          id: true,             // userId in API responses
+          email: true,
+          password: true,       // hashed password
+          userType: true,       // "company" | "tenant"
+          tenantId: true,
+          role: {
+            select: {
+              id: true,
+              roleName: true,
+              permissions: true,
+            },
+          },
+        },
       });
+
       if (!user) {
         throw new Error("Invalid email or password.");
       }
@@ -23,22 +41,24 @@ class AuthService {
         throw new Error("JWT_SECRET is not defined in environment variables");
       }
 
+      // Keep JWT payload keys in camelCase
       const userInfo = {
-        user_id: user.user_id,
-        user_type: user.user_type,
-        tenant_id: user.tenant_id,
-        role: user.role,
+        userId: user.id,
+        userType: user.userType,
+        tenantId: user.tenantId,
+        role: user.role, // { id, roleName, permissions } or null
       };
 
       const token = jwt.sign(userInfo, process.env.JWT_SECRET, {
-        expiresIn: "24400h", // Token expiration time
+        expiresIn: "24400h",
       });
 
+      // Sanitize user for response (no password)
       const sanitizedUser = {
-        user_id: user.user_id,
+        userId: user.id,
         email: user.email,
-        user_type: user.user_type,
-        tenant_id: user.tenant_id,
+        userType: user.userType,
+        tenantId: user.tenantId,
         role: user.role,
       };
 

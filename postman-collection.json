@@ -25,14 +25,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"school_name\": \"Sri Santhinikethan English Medium High School, Kadiri\",\n  \"contact_address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Springfield\",\n    \"state\": \"IL\",\n    \"zip\": \"515591\"\n  },\n  \"contact_phone\": \"+917416557472\",\n  \"contact_email\": \"tenant@gmail.com\",\n  \"admin_full_name\": \"Siddiq\",\n  \"admin_phone\": \"+917416557472\",\n  \"admin_email\": \"tenant@gmail.com\",\n  \"subscription_plan\": \"premium\"\n}\n"
+              "raw": "{\n  \"schoolName\": \"Sri Santhinikethan English Medium High School, Kadiri\",\n  \"contactAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Springfield\",\n    \"state\": \"IL\",\n    \"zip\": \"515591\"\n  },\n  \"contactPhone\": \"+917416557472\",\n  \"contactEmail\": \"tenant@gmail.com\",\n  \"adminFullName\": \"Siddiq\",\n  \"adminPhone\": \"+917416557472\",\n  \"adminEmail\": \"tenant@gmail.com\",\n  \"subscriptionPlan\": \"premium\"\n}\n"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/tenants",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "tenants"]
+              "path": [
+                "api",
+                "tenants"
+              ]
             }
           },
           "response": []
@@ -54,9 +59,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/tenants",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "tenants"]
+              "path": [
+                "api",
+                "tenants"
+              ]
             }
           },
           "response": []
@@ -78,9 +88,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/tenants/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "tenants", ":id"],
+              "path": [
+                "api",
+                "tenants",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -111,9 +127,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/tenants/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "tenants", ":id"],
+              "path": [
+                "api",
+                "tenants",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -140,9 +162,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/tenants/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "tenants", ":id"],
+              "path": [
+                "api",
+                "tenants",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -175,9 +203,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/public/domain",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "public", "domain"]
+              "path": [
+                "api",
+                "public",
+                "domain"
+              ]
             }
           },
           "response": []
@@ -207,14 +241,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Shabbu\",\n  \"last_name\": \"Mohammed\",\n  \"email\": \"smd@aiyaan.com\",\n  \"password\": \"shabbu@123\",\n  \"role\": \"super_admin\"\n}"
+              "raw": "{\n  \"firstName\": \"Shabbu\",\n  \"lastName\": \"Mohammed\",\n  \"email\": \"smd@aiyaan.com\",\n  \"password\": \"shabbu@123\",\n  \"role\": \"super_admin\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users"]
+              "path": [
+                "api",
+                "users"
+              ]
             }
           },
           "response": []
@@ -239,14 +278,20 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"full_name\": \"Yaseen\",\n  \"email\": \"yaseen@aiyaan.com\",\n  \"password\": \"Yaseen@123\",\n  \"user_type\":\"company\"\n}"
+              "raw": "{\n  \"fullName\": \"Yaseen\",\n  \"email\": \"yaseen@aiyaan.com\",\n  \"password\": \"Yaseen@123\",\n  \"userType\": \"company\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users/company",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", "company"]
+              "path": [
+                "api",
+                "users",
+                "company"
+              ]
             }
           },
           "response": []
@@ -272,9 +317,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users"]
+              "path": [
+                "api",
+                "users"
+              ]
             }
           },
           "response": []
@@ -300,9 +350,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users/company",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", "company"]
+              "path": [
+                "api",
+                "users",
+                "company"
+              ]
             }
           },
           "response": []
@@ -328,9 +384,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", ":id"],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -360,14 +422,20 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"role\": \"teacher\"\n}"
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"phone\": \"+1234567890\",\n  \"fullName\": \"Jane Doe\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", ":id"],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -397,55 +465,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"role\": \"teacher\"\n}"
+              "raw": "{\n  \"oldPassword\": \"oldPassword123\",\n  \"newPassword\": \"newPassword123\"\n}"
             },
             "url": {
-              "raw": "http://{{host}}:{{port}}/api/users/:id",
+              "raw": "http://{{host}}:{{port}}/api/users/password",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", ":id"],
-              "variable": [
-                {
-                  "key": "id"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Reset Password With OTP",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              },
-              {
-                "key": "x-tenant-id",
-                "value": "{{x-tenant-id}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"role\": \"teacher\"\n}"
-            },
-            "url": {
-              "raw": "http://{{host}}:{{port}}/api/users/:id",
-              "protocol": "http",
-              "host": ["{{host}}"],
-              "port": "{{port}}",
-              "path": ["api", "users", ":id"],
-              "variable": [
-                {
-                  "key": "id"
-                }
+              "path": [
+                "api",
+                "users",
+                "password"
               ]
             }
           },
@@ -454,35 +486,58 @@
         {
           "name": "Forget Password",
           "request": {
-            "method": "PUT",
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              },
-              {
-                "key": "x-tenant-id",
-                "value": "{{x-tenant-id}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"role\": \"teacher\"\n}"
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
             },
             "url": {
-              "raw": "http://{{host}}:{{port}}/api/users/:id",
+              "raw": "http://{{host}}:{{port}}/api/users/forget-password",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", ":id"],
-              "variable": [
-                {
-                  "key": "id"
-                }
+              "path": [
+                "api",
+                "users",
+                "forget-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password With OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"newPassword123\"\n}"
+            },
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/users/reset-password",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "users",
+                "reset-password"
               ]
             }
           },
@@ -509,9 +564,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/users/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "users", ":id"],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -546,14 +607,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"course_name\": \"Bi.P.C\",\n  \"course_description\": \"Deals with Biology, Physics and Chemistry.\"\n}"
+              "raw": "{\n  \"courseName\": \"Bi.P.C\",\n  \"courseDescription\": \"Deals with Biology, Physics and Chemistry.\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/courses",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "courses"]
+              "path": [
+                "api",
+                "courses"
+              ]
             }
           },
           "response": []
@@ -579,9 +645,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/courses",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "courses"]
+              "path": [
+                "api",
+                "courses"
+              ]
             }
           },
           "response": []
@@ -607,9 +678,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/courses/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "courses", ":id"],
+              "path": [
+                "api",
+                "courses",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -639,14 +716,20 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"course_name\": \"Advanced Mathematics\",\n  \"course_description\": \"An updated description for the course.\"\n}"
+              "raw": "{\n  \"courseName\": \"Advanced Mathematics\",\n  \"courseDescription\": \"An updated description for the course.\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/courses/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "courses", ":id"],
+              "path": [
+                "api",
+                "courses",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -677,9 +760,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/courses/c8d384d5-3e74-4f6c-8314-db65b1611c6a",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "courses", "c8d384d5-3e74-4f6c-8314-db65b1611c6a"]
+              "path": [
+                "api",
+                "courses",
+                "c8d384d5-3e74-4f6c-8314-db65b1611c6a"
+              ]
             }
           },
           "response": []
@@ -709,14 +798,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"tenant_id\": \"bc9223c5-76fb-4867-8dde-42fd80aa9cb1\",\n  \"role_name\": \"Admin\",\n  \"description\": \"Administrator role with all permissions.\",\n  \"permissions\": [\"manage_users\", \"view_reports\", \"edit_content\"]\n}"
+              "raw": "{\n  \"roleName\": \"Admin\",\n  \"description\": \"Administrator role with all permissions.\",\n  \"permissions\": [\"manage_users\", \"view_reports\", \"edit_content\"]\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/roles",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "roles"]
+              "path": [
+                "api",
+                "roles"
+              ]
             }
           },
           "response": []
@@ -742,9 +836,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/roles",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "roles"]
+              "path": [
+                "api",
+                "roles"
+              ]
             }
           },
           "response": []
@@ -770,9 +869,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/roles/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "roles", ":id"],
+              "path": [
+                "api",
+                "roles",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -802,14 +907,20 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"role_name\": \"Updated Admin\",\n  \"permissions\": [\"manage_users\", \"view_reports\"]\n}"
+              "raw": "{\n  \"roleName\": \"Updated Admin\",\n  \"permissions\": [\"manage_users\", \"view_reports\"]\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/roles/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "roles", ":id"],
+              "path": [
+                "api",
+                "roles",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -840,9 +951,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/roles/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "roles", ":id"],
+              "path": [
+                "api",
+                "roles",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -874,9 +991,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/auth/login",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "auth", "login"]
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
           },
           "response": []
@@ -898,9 +1021,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/auth/login",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "auth", "login"]
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
           },
           "response": []
@@ -922,9 +1051,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/auth/logout",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "auth", "logout"]
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
             }
           },
           "response": []
@@ -954,14 +1089,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"course_id\": \"<course_id>\",\n  \"grade_name\": \"Grade 10\"\n}"
+              "raw": "{\n  \"courseId\": \"<course_id>\",\n  \"gradeName\": \"Grade 10\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/grades",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "grades"]
+              "path": [
+                "api",
+                "grades"
+              ]
             }
           },
           "response": []
@@ -987,9 +1127,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/grades",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "grades"]
+              "path": [
+                "api",
+                "grades"
+              ]
             }
           },
           "response": []
@@ -1015,9 +1160,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/grades/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "grades", ":id"],
+              "path": [
+                "api",
+                "grades",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -1047,14 +1198,20 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"course_id\": \"<updated_course_id>\",\n  \"grade_name\": \"Updated Grade Name\"\n}"
+              "raw": "{\n  \"courseId\": \"<updated_course_id>\",\n  \"gradeName\": \"Updated Grade Name\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/grades/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "grades", ":id"],
+              "path": [
+                "api",
+                "grades",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -1085,9 +1242,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/grades/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "grades", ":id"],
+              "path": [
+                "api",
+                "grades",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -1116,20 +1279,25 @@
                 "value": "Bearer {{token}}"
               },
               {
-                "key": "tenant_id",
+                "key": "tenantId",
                 "value": "{{tenant_id}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"grade_id\": \"<grade_id>\",\n  \"section_name\": \"Section A\",\n  \"subject_ids\": [\n    \"<subject_id_1>\",\n    \"<subject_id_2>\"\n  ]\n}"
+              "raw": "{\n  \"gradeId\": \"<grade_id>\",\n  \"sectionName\": \"Section A\",\n  \"subjectIds\": [\n    \"<subject_id_1>\",\n    \"<subject_id_2>\"\n  ]\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/sections",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "sections"]
+              "path": [
+                "api",
+                "sections"
+              ]
             }
           },
           "response": []
@@ -1144,16 +1312,21 @@
                 "value": "Bearer {{token}}"
               },
               {
-                "key": "tenant_id",
+                "key": "tenantId",
                 "value": "{{tenant_id}}"
               }
             ],
             "url": {
               "raw": "http://{{host}}:{{port}}/api/sections",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "sections"]
+              "path": [
+                "api",
+                "sections"
+              ]
             }
           },
           "response": []
@@ -1168,16 +1341,22 @@
                 "value": "Bearer {{token}}"
               },
               {
-                "key": "tenant_id",
+                "key": "tenantId",
                 "value": "{{tenant_id}}"
               }
             ],
             "url": {
               "raw": "http://{{host}}:{{port}}/api/sections/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "sections", ":id"],
+              "path": [
+                "api",
+                "sections",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -1201,20 +1380,26 @@
                 "value": "Bearer {{token}}"
               },
               {
-                "key": "tenant_id",
+                "key": "tenantId",
                 "value": "{{tenant_id}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"grade_id\": \"<updated_grade_id>\",\n  \"section_name\": \"Updated Section A\",\n  \"subject_ids\": [\n    \"<updated_subject_id_1>\",\n    \"<updated_subject_id_2>\"\n  ]\n}"
+              "raw": "{\n  \"gradeId\": \"<updated_grade_id>\",\n  \"sectionName\": \"Updated Section A\",\n  \"subjectIds\": [\n    \"<updated_subject_id_1>\",\n    \"<updated_subject_id_2>\"\n  ]\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/sections/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "sections", ":id"],
+              "path": [
+                "api",
+                "sections",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -1234,16 +1419,22 @@
                 "value": "Bearer {{token}}"
               },
               {
-                "key": "tenant_id",
+                "key": "tenantId",
                 "value": "{{tenant_id}}"
               }
             ],
             "url": {
               "raw": "http://{{host}}:{{port}}/api/sections/:id",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "sections", ":id"],
+              "path": [
+                "api",
+                "sections",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id"
@@ -1278,14 +1469,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"subject_name\": \"Physics\",\n  \"course_id\": \"87a3891a-609f-41f8-a4aa-538004756765\"\n}"
+              "raw": "{\n  \"subjectName\": \"Physics\",\n  \"courseId\": \"87a3891a-609f-41f8-a4aa-538004756765\"\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/subjects",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "subjects"]
+              "path": [
+                "api",
+                "subjects"
+              ]
             }
           },
           "response": []
@@ -1307,9 +1503,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/subjects",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "subjects"]
+              "path": [
+                "api",
+                "subjects"
+              ]
             }
           },
           "response": []
@@ -1331,7 +1532,9 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/subjects/course/87a3891a-609f-41f8-a4aa-538004756765",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
               "path": [
                 "api",
@@ -1360,7 +1563,9 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/subjects/58b39fed-aafe-4210-9b49-15c7af9fe7ec",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
               "path": [
                 "api",
@@ -1391,12 +1596,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"subject_name\": \"Biology\",\n  \"is_common\": true\n}"
+              "raw": "{\n  \"subjectName\": \"Biology\",\n  \"isCommon\": true\n}"
             },
             "url": {
               "raw": "http://{{host}}:{{port}}/api/subjects/58b39fed-aafe-4210-9b49-15c7af9fe7ec",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
               "path": [
                 "api",
@@ -1425,7 +1632,9 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/subjects/c1c8bf0a-71b5-49e5-ac73-1bbad185175f",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
               "path": [
                 "api",
@@ -1467,9 +1676,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/inventory/categories",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "inventory", "categories"]
+              "path": [
+                "api",
+                "inventory",
+                "categories"
+              ]
             }
           },
           "response": []
@@ -1491,9 +1706,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/inventory/categories",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "inventory", "categories"]
+              "path": [
+                "api",
+                "inventory",
+                "categories"
+              ]
             }
           },
           "response": []
@@ -1519,9 +1740,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/inventory/items",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "inventory", "items"]
+              "path": [
+                "api",
+                "inventory",
+                "items"
+              ]
             }
           },
           "response": []
@@ -1543,9 +1770,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/inventory/items",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "inventory", "items"]
+              "path": [
+                "api",
+                "inventory",
+                "items"
+              ]
             }
           },
           "response": []
@@ -1571,9 +1804,17 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/inventory/items/:id/stock",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "inventory", "items", ":id", "stock"],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                ":id",
+                "stock"
+              ],
               "variable": [
                 {
                   "key": "id",
@@ -1610,9 +1851,15 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/uploads/presigned-url",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "uploads", "presigned-url"]
+              "path": [
+                "api",
+                "uploads",
+                "presigned-url"
+              ]
             }
           },
           "response": []
@@ -1638,9 +1885,14 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/uploads",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "uploads"]
+              "path": [
+                "api",
+                "uploads"
+              ]
             }
           },
           "response": []
@@ -1658,9 +1910,17 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/uploads/tenant123/students/student_123",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
-              "path": ["api", "uploads", "tenant123", "students", "student_123"]
+              "path": [
+                "api",
+                "uploads",
+                "tenant123",
+                "students",
+                "student_123"
+              ]
             }
           },
           "response": []
@@ -1678,7 +1938,9 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/uploads/tenant123/students/student_123/profile_picture",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
               "path": [
                 "api",
@@ -1705,7 +1967,9 @@
             "url": {
               "raw": "http://{{host}}:{{port}}/api/uploads/tenant123/students/student_123/abcd1234",
               "protocol": "http",
-              "host": ["{{host}}"],
+              "host": [
+                "{{host}}"
+              ],
               "port": "{{port}}",
               "path": [
                 "api",
@@ -1747,9 +2011,15 @@
         "url": {
           "raw": "http://localhost:5001/api/gcs/update-cors",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "5001",
-          "path": ["api", "gcs", "update-cors"]
+          "path": [
+            "api",
+            "gcs",
+            "update-cors"
+          ]
         }
       },
       "response": []
@@ -1771,9 +2041,15 @@
         "url": {
           "raw": "http://localhost:5001/api/gcs/view-metadata",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "5001",
-          "path": ["api", "gcs", "view-metadata"]
+          "path": [
+            "api",
+            "gcs",
+            "view-metadata"
+          ]
         }
       },
       "response": []
@@ -1799,13 +2075,21 @@
             ],
             "url": {
               "raw": "{{base_url}}/students",
-              "host": ["{{base_url}}"],
-              "path": ["students"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "students"
+              ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"date_of_birth\": \"2008-05-12\",\n  \"gender\": \"Male\",\n  \"course_id\": \"uuid-course\",\n  \"grade_id\": \"uuid-grade\",\n  \"section_id\": \"uuid-section\",\n  \"admission_number\": \"ADM12345\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"dateOfBirth\": \"2008-05-12\",\n  \"gender\": \"Male\",\n  \"courseId\": \"uuid-course\",\n  \"gradeId\": \"uuid-grade\",\n  \"sectionId\": \"uuid-section\",\n  \"admissionNumber\": \"ADM12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
           }
         },
@@ -1827,8 +2111,12 @@
             ],
             "url": {
               "raw": "{{base_url}}/students",
-              "host": ["{{base_url}}"],
-              "path": ["students"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "students"
+              ]
             }
           }
         },
@@ -1850,8 +2138,13 @@
             ],
             "url": {
               "raw": "{{base_url}}/students/:id",
-              "host": ["{{base_url}}"],
-              "path": ["students", ":id"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "students",
+                ":id"
+              ]
             }
           }
         },
@@ -1873,13 +2166,22 @@
             ],
             "url": {
               "raw": "{{base_url}}/students/:id",
-              "host": ["{{base_url}}"],
-              "path": ["students", ":id"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "students",
+                ":id"
+              ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"grade_id\": \"new-uuid-grade\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"gradeId\": \"new-uuid-grade\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
           }
         },
@@ -1901,10 +2203,296 @@
             ],
             "url": {
               "raw": "{{base_url}}/students/:id",
-              "host": ["{{base_url}}"],
-              "path": ["students", ":id"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "students",
+                ":id"
+              ]
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "Academic Years",
+      "item": [
+        {
+          "name": "Create Academic Year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"2025-26\",\n  \"startDate\": \"2025-04-01T00:00:00Z\",\n  \"endDate\": \"2026-03-31T23:59:59Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Academic Years",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              }
+            ],
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Academic Year",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              }
+            ],
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years/active",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years",
+                "active"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Academic Year By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              }
+            ],
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years/:id",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Academic Year",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"2025-26-Updated\",\n  \"startDate\": \"2025-04-01T00:00:00Z\",\n  \"endDate\": \"2026-03-31T23:59:59Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years/:id",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate Academic Year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              }
+            ],
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years/:id/activate",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years",
+                ":id",
+                "activate"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive Academic Year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "type": "text",
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}"
+              }
+            ],
+            "url": {
+              "raw": "http://{{host}}:{{port}}/api/academic-years/:id/archive",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "academic-years",
+                ":id",
+                "archive"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
@@ -1915,7 +2503,9 @@
       "script": {
         "type": "text/javascript",
         "packages": {},
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     },
     {
@@ -1923,7 +2513,9 @@
       "script": {
         "type": "text/javascript",
         "packages": {},
-        "exec": [""]
+        "exec": [
+          ""
+        ]
       }
     }
   ],

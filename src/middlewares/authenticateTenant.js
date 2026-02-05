@@ -1,4 +1,4 @@
-import { User } from "../models/index.js";
+import { prisma } from "../lib/prisma.js";
 import { getTenantIdFromRequest } from "../utils/requestHelper.js";
 
 export const authenticateTenant = async (req, res, next) => {
@@ -10,19 +10,27 @@ export const authenticateTenant = async (req, res, next) => {
         .json({ message: "Tenant ID is required in headers." });
     }
 
-    const user = await User.findByPk(req.user.user_id);
+    const userId = req.user?.userId; // set by your JWT middleware
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized." });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, userType: true, tenantId: true },
+    });
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    if (user.user_type !== "tenant" || user.tenant_id !== tenantIdFromHeader) {
+    if (user.userType !== "tenant" || user.tenantId !== tenantIdFromHeader) {
       return res.status(403).json({
         message: "Access restricted to tenant users or invalid tenant ID.",
       });
     }
 
-    req.tenant_id = user.tenant_id;
+    req.tenantId = user.tenantId;
     next();
   } catch (error) {
     console.log(error);

@@ -6,7 +6,8 @@ import { tableColumns } from "../../utils/columns.js";
 class GradesController {
   static async createGrade(req, res) {
     try {
-      const grade = await GradesService.createGrade(req.body, req.tenant_id);
+      console.log("Tenant ID:", req.tenantId, "Request Body:", req.body);
+      const grade = await GradesService.createGrade(req.body, req.tenantId);
       return responseHandler(
         res,
         "success",
@@ -22,8 +23,8 @@ class GradesController {
   static async getGrades(req, res) {
     try {
       const grades = await GradesService.getGrades(
-        req.tenant_id,
-        req.query.course_id
+        req.tenantId,
+        req.query.courseId
       );
       const result = {
         rows: grades,
@@ -44,7 +45,7 @@ class GradesController {
   static async getGradeById(req, res) {
     try {
       const gradeId = req.params.id;
-      const grade = await GradesService.getGradeById(gradeId, req.tenant_id);
+      const grade = await GradesService.getGradeById(gradeId, req.tenantId);
       return responseHandler(
         res,
         "success",
@@ -63,7 +64,7 @@ class GradesController {
       const updatedGrade = await GradesService.updateGrade(
         id,
         req.body,
-        req.tenant_id
+        req.tenantId
       );
       if (!updatedGrade) {
         logger.warn(`Grade not found for ID: ${id}`);
@@ -85,7 +86,7 @@ class GradesController {
   static async deleteGrade(req, res) {
     try {
       const { id } = req.params;
-      const deleted = await GradesService.deleteGrade(id, req.tenant_id);
+      const deleted = await GradesService.deleteGrade(id, req.tenantId);
       if (!deleted) {
         logger.warn(`Grade not found for deletion: ID=${id}`);
         return responseHandler(res, "fail", null, "Grade not found.");

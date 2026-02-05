@@ -3,7 +3,7 @@ import responseHandler from "../../utils/responseHandler.js";
 
 export const createCategory = async (req, res) => {
   try {
-    const tenantId = req.user.tenant_id; // Assuming tenant_id is in req.user
+    const tenantId = req.user.tenantId; // Assuming tenantId is in req.user
     const category = await inventoryService.createCategory(req.body, tenantId);
     responseHandler(res, "success", category, "Category created successfully.");
   } catch (error) {
@@ -13,7 +13,7 @@ export const createCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
   try {
-    const tenantId = req.user.tenant_id;
+    const tenantId = req.user.tenantId;
     const categories = await inventoryService.getCategories(tenantId);
     responseHandler(
       res,
@@ -28,7 +28,7 @@ export const getCategories = async (req, res) => {
 
 export const createItem = async (req, res) => {
   try {
-    const tenantId = req.user.tenant_id;
+    const tenantId = req.user.tenantId;
     const item = await inventoryService.createItem(req.body, tenantId);
     responseHandler(res, "success", item, "Item created successfully.");
   } catch (error) {
@@ -38,7 +38,7 @@ export const createItem = async (req, res) => {
 
 export const getItems = async (req, res) => {
   try {
-    const tenantId = req.user.tenant_id;
+    const tenantId = req.user.tenantId;
     const items = await inventoryService.getItems(tenantId);
     responseHandler(res, "success", items, "Items fetched successfully.");
   } catch (error) {
@@ -48,7 +48,7 @@ export const getItems = async (req, res) => {
 
 export const adjustStock = async (req, res) => {
   try {
-    const tenantId = req.user.tenant_id;
+    const tenantId = req.user.tenantId;
     const adjustment = await inventoryService.adjustStock(
       req.params.id,
       req.body,

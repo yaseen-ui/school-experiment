@@ -1,65 +1,115 @@
-import { Role, Tenant } from "../../models/index.js";
+// src/modules/roles/role.service.js
+import { prisma } from "../../lib/prisma.js";
+
+const mapIn = (data = {}) => ({
+  tenantId: data.tenantId ?? data.tenant_id,
+  roleName: data.roleName ?? data.role_name,
+  permissions: data.permissions, // JSON
+});
+
+const mapUpdateIn = (data = {}) => {
+  const out = {
+    roleName: data.roleName ?? data.role_name,
+    permissions: data.permissions,
+  };
+  Object.keys(out).forEach((k) => out[k] === undefined && delete out[k]);
+  return out;
+};
 
 class RoleService {
   static async createRole(req) {
     try {
-      const { role_name, permissions } = req;
-      const tenant_id = req.tenant_id;
+      const { roleName, role_name, permissions } = req;
+      const tenantId = req.tenantId || req.tenant_id;
 
-      // Validate required fields
-      if (!tenant_id || !role_name || !permissions) {
+      if (!tenantId || !roleName && !role_name || permissions == null) {
         throw new Error(
-          "Missing required fields: tenant_id, role_name, or permissions."
+          "Missing required fields: tenantId, roleName, or permissions."
         );
       }
 
-      // Check if the tenant exists
-      const tenantExists = await Tenant.findByPk(tenant_id);
-      if (!tenantExists) {
-        throw new Error("Invalid tenant_id. No such tenant exists.");
-      }
-
-      // Check if the role already exists for the tenant
-      const existingRole = await Role.findOne({
-        where: { tenant_id, role_name },
+      // Tenant must exist
+      const tenant = await prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { id: true },
       });
-      if (existingRole) {
-        throw new Error(
-          `Role name '${role_name}' already exists for the tenant.`
-        );
+      if (!tenant) {
+        throw new Error("Invalid tenantId. No such tenant exists.");
       }
 
-      // Prepare the data for the new role
-      const data = {
-        tenant_id,
-        role_name,
-        permissions,
-      };
+      // Friendly duplicate check (schema already has unique (tenantId, roleName))
+      const existing = await prisma.role.findFirst({
+        where: { tenantId: tenantId, roleName: roleName || role_name },
+        select: { id: true },
+      });
+      if (existing) {
+        throw new Error(`Role name '${roleName || role_name}' already exists for the tenant.`);
+      }
 
-      // Create the role
-      return await Role.create(data);
+      // Create
+      const created = await prisma.role.create({
+        data: {
+          tenantId: tenantId,
+          roleName: roleName || role_name,
+          permissions, // JSON
+        },
+      });
+      return created;
     } catch (error) {
       console.error(`Error creating role: ${error.message}`);
-      throw error; // Rethrow the error to be handled by the caller
+      throw error;
     }
   }
 
   static async getAllRoles(req) {
-    return await Role.findAll({ where: { tenant_id: req.tenant_id } });
-  }
-
-  static async getRoleById(role_id, tenant_id) {
-    return await Role.findByPk(role_id, { where: { tenant_id } });
-  }
-
-  static async updateRole(role_id, data, tenant_id) {
-    return await Role.update(data, {
-      where: { role_id, tenant_id },
+    return prisma.role.findMany({
+      where: { tenantId: req.tenantId || req.tenant_id },
+      orderBy: { createdAt: "desc" },
     });
   }
 
-  static async deleteRole(role_id, tenant_id) {
-    return await Role.destroy({ where: { role_id, tenant_id } });
+  static async getRoleById(roleId, tenantId) {
+    // Scope by tenant as intended
+    return prisma.role.findFirst({
+      where: { id: roleId, tenantId: tenantId },
+    });
+  }
+
+  static async updateRole(roleId, data, tenantId) {
+    // If renaming, guard unique per tenant
+    if (data.roleName || data.role_name) {
+      const nextName = data.roleName ?? data.role_name;
+      const dup = await prisma.role.findFirst({
+        where: {
+          tenantId: tenantId,
+          roleName: nextName,
+          NOT: { id: roleId },
+        },
+        select: { id: true },
+      });
+      if (dup) {
+        throw new Error(`Role name '${nextName}' already exists for the tenant.`);
+      }
+    }
+
+    const result = await prisma.role.updateMany({
+      where: { id: roleId, tenantId: tenantId },
+      data: mapUpdateIn(data),
+    });
+
+    if (result.count === 1) {
+      return prisma.role.findFirst({
+        where: { id: roleId, tenantId: tenantId },
+      });
+    }
+    return { count: result.count }; // nothing updated (not found / unauthorized)
+  }
+
+  static async deleteRole(roleId, tenantId) {
+    const result = await prisma.role.deleteMany({
+      where: { id: roleId, tenantId: tenantId },
+    });
+    return { count: result.count };
   }
 }
 

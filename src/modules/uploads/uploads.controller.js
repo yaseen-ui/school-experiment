@@ -3,13 +3,13 @@ import responseHandler from "../../utils/responseHandler.js";
 
 export const getPresignedUrl = async (req, res) => {
   try {
-    const { tenant_id, category, path, mimeType } = req.body;
-    if (!tenant_id || !category || !path || !mimeType) {
+    const { tenantId, category, path, mimeType } = req.body;
+    if (!tenantId || !category || !path || !mimeType) {
       return responseHandler(res, "error", null, "Missing required fields.");
     }
 
     const urlData = await uploadService.getPresignedUrl(
-      tenant_id,
+      tenantId,
       category,
       path,
       mimeType
@@ -28,17 +28,17 @@ export const getPresignedUrl = async (req, res) => {
 
 export const storeFileMetadata = async (req, res) => {
   try {
-    const { tenant_id, category, entity_id, document_type, gcs_url } = req.body;
-    if (!tenant_id || !category || !entity_id || !document_type || !gcs_url) {
+    const { tenantId, category, entityId, documentType, gcsUrl } = req.body;
+    if (!tenantId || !category || !entityId || !documentType || !gcsUrl) {
       return responseHandler(res, "error", null, "Missing required fields.");
     }
 
     const storedFile = await uploadService.storeFileMetadata(
-      tenant_id,
+      tenantId,
       category,
-      entity_id,
-      document_type,
-      gcs_url
+      entityId,
+      documentType,
+      gcsUrl
     );
 
     return responseHandler(
@@ -54,8 +54,8 @@ export const storeFileMetadata = async (req, res) => {
 
 export const getFiles = async (req, res) => {
   try {
-    const { tenant_id, category, entity_id } = req.params;
-    if (!tenant_id || !category || !entity_id) {
+    const { tenantId, category, entityId } = req.params;
+    if (!tenantId || !category || !entityId) {
       return responseHandler(
         res,
         "error",
@@ -64,7 +64,7 @@ export const getFiles = async (req, res) => {
       );
     }
 
-    const files = await uploadService.getFiles(tenant_id, category, entity_id);
+    const files = await uploadService.getFiles(tenantId, category, entityId);
     return responseHandler(
       res,
       "success",
@@ -78,8 +78,8 @@ export const getFiles = async (req, res) => {
 
 export const getSpecificFile = async (req, res) => {
   try {
-    const { tenant_id, category, entity_id, document_type } = req.params;
-    if (!tenant_id || !category || !entity_id || !document_type) {
+    const { tenantId, category, entityId, documentType } = req.params;
+    if (!tenantId || !category || !entityId || !documentType) {
       return responseHandler(
         res,
         "error",
@@ -89,10 +89,10 @@ export const getSpecificFile = async (req, res) => {
     }
 
     const file = await uploadService.getSpecificFile(
-      tenant_id,
+      tenantId,
       category,
-      entity_id,
-      document_type
+      entityId,
+      documentType
     );
 
     if (!file) {
@@ -112,8 +112,8 @@ export const getSpecificFile = async (req, res) => {
 
 export const deleteFile = async (req, res) => {
   try {
-    const { tenant_id, category, entity_id, file_id } = req.params;
-    if (!tenant_id || !category || !entity_id || !file_id) {
+    const { tenantId, category, entityId, fileId } = req.params;
+    if (!tenantId || !category || !entityId || !fileId) {
       return responseHandler(
         res,
         "error",
@@ -122,7 +122,7 @@ export const deleteFile = async (req, res) => {
       );
     }
 
-    await uploadService.deleteFile(tenant_id, category, entity_id, file_id);
+    await uploadService.deleteFile(tenantId, category, entityId, fileId);
     return responseHandler(res, "success", null, "File deleted successfully.");
   } catch (error) {
     return responseHandler(res, "error", null, error.message);
